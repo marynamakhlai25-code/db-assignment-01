@@ -1,12 +1,10 @@
 CREATE DATABASE CinemaDB;
 
--- 1. Таблиця жанрів
 CREATE TABLE Genres (
     GenreID SERIAL PRIMARY KEY,
     GenreName VARCHAR(50) NOT NULL
 );
 
--- 2. Таблиця фільмів
 CREATE TABLE Movies (
     MovieID SERIAL PRIMARY KEY,
     Title VARCHAR(150) NOT NULL,
@@ -15,7 +13,6 @@ CREATE TABLE Movies (
     FOREIGN KEY (GenreID) REFERENCES Genres(GenreID)
 );
 
--- 3. Таблиця сеансів
 CREATE TABLE Shows (
     ShowID SERIAL PRIMARY KEY,
     MovieID INT,
@@ -24,7 +21,7 @@ CREATE TABLE Shows (
     FOREIGN KEY (MovieID) REFERENCES Movies(MovieID)
 );
 
--- 4. Таблиця глядачів
+
 CREATE TABLE Customers (
     CustomerID SERIAL PRIMARY KEY,
     CustomerName VARCHAR(100) NOT NULL,
@@ -32,7 +29,6 @@ CREATE TABLE Customers (
     IsVIP BOOLEAN DEFAULT FALSE
 );
 
--- 5. Таблиця квитків
 CREATE TABLE Tickets (
     TicketID SERIAL PRIMARY KEY,
     ShowID INT,
@@ -43,7 +39,6 @@ CREATE TABLE Tickets (
     FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
 );
 
--- НАПОВНЕННЯ ДАНИМИ
 INSERT INTO Genres (GenreName) VALUES ('Fantasy'), ('ScienceFiction'), ('Drama');
 
 INSERT INTO Movies (Title, Duration, GenreID) VALUES 
@@ -70,7 +65,6 @@ INSERT INTO Tickets (ShowID, CustomerID, SeatNumber, PurchaseDate) VALUES
 (3, 3, 22, '2026-05-30'),
 (3, 1, 23, '2026-05-30');
 
--- БАЗОВИЙ СКЛАДНИЙ SELECT (Запит на 15 балів)
 SELECT 
     c.CustomerName,
     m.Title AS MovieTitle,
@@ -87,7 +81,6 @@ GROUP BY c.CustomerName, m.Title, g.GenreName
 HAVING SUM(s.TicketPrice) > 140.00
 ORDER BY TotalSpent DESC;
 
--- ДОДАТКОВИЙ БОНУС: CTE (+1 бал)
 WITH ExpensiveShows AS (
     SELECT MovieID, TicketPrice FROM Shows WHERE TicketPrice > 140.00
 )
